@@ -38,23 +38,20 @@ For more information about on how to evaluate AD9102/AD9106 evaluation board usi
 
 
 ### Software Setup
-  * **Compiler/Builder IDE:**
-     *  [Arm Keil Studio Cloud IDE](https://studio.keil.arm.com/)
+  * **Compiler/Builder IDE:** [Arm Keil Studio Cloud IDE](https://studio.keil.arm.com/)
   
-  * **Driver:**
-     *  [ADI Mbed EVAL-AD910x Repository](https://os.mbed.com/teams/AnalogDevices/code/EVAL-AD910x/)
-     *  ADI Github EVAL-AD910x Repository
-  * From the repository, import the source files to Keil Studio.
+  * **Driver:** [ADI Github EVAL-AD910x Repository](https://github.com/analogdevicesinc/eval-ad910x.git)
+  * From the repository, import the source files by copying the repository HTTPS web URL and clone it to Keil Studio Cloud.
   * Select specific build target, SDP-K1. (SDP-K1 must be detected as connected device)
   * User has two method to load the driver into SDP-K1 controller board.
-      * Using **Keil Studio cloud built-in Run Terminal**:
+      * Using **Keil Studio Cloud Run Terminal**:
           * Open Preferences>Open UI Settings>Extensions>Run and configure the following:
               * Flash Mode: cmsis
               * Verify Flash: Unchecked
           * Click Open Serial Monitor and set-up baud rate to 115200.
           * Click Run to build the source code file and load to SDP-K1 controller board.
       
-      * Using **Separate Terminal emulator (TeraTerm, Putty)**:
+      * Using separate **Terminal Emulator (TeraTerm, Putty)**:
           * Build the source code thru Keil Studio Cloud.
           * Drag and drop binary (.bin) into SDP-K1 controller board.
           * Open any terminal emulator, and configure the following:
