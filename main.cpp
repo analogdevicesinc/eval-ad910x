@@ -23,8 +23,8 @@
         * Wiki Guide:   https://wiki.analog.com/resources/eval/dpg/eval-ad9106-mbed
 
     User Instructions
-        * To use the code for single-board evaluation: Remove / * in Line 84 and * / in Line 144
-        * To use the code for multi-board evaluation: Remove / * in Line 145 and * / in Line 202
+        * To use the code for single-board evaluation: Uncomment Line 90
+        * To use the code for multi-board evaluation: Uncomment Line 91
 *******************************************************************************/
 
 // *** Libraries *** //
@@ -47,6 +47,7 @@ UnbufferedSerial pc( USBTX, USBRX, BAUD_RATE );
 
 #pragma region: Function Declarations
 /*** Single-Board ***/
+void main_single( void );
 void setup_device_single( void );
 void print_menu_single( void );
 void print_prompt1_single( void );
@@ -62,6 +63,7 @@ void prog_example6_single( void );
 void stop_example_single( void );
 
 /*** Multi-Board ***/
+void main_multi( void );
 void setup_device_multi( void );
 void print_menu_multi( void );
 void print_menu_ext( void );
@@ -84,9 +86,15 @@ void print_prompt4( void );
 #pragma endregion
 
 // *** Main Functions *** //
-/*
-#pragma region: Main function for single-board use case
 int main() {
+    //main_single();
+    //main_multi();
+    return 0;
+}
+
+#pragma region (Function Definitions)
+#pragma region: Main Functions
+void main_single(){
     char ext_clk = 'y';
     char amp_out = 'n';
     char stop = 'n';
@@ -100,29 +108,30 @@ int main() {
     setup_device_single();
     print_title_single();
     
+    // * Configure Board Settings * //
+    print_prompt1_single();
+    while( pc.readable() == 0 );
+    ext_clk = getchar();
+    if ( ext_clk == 'y' ) {
+        en_cvddx = 0;
+        printf("\nPlease connect external clock source to J10.\n");
+    } else {
+        en_cvddx = 1;
+        printf("\nOn-board oscillator supply is enabled.\n");
+    }
+    thread_sleep_for(500);
+    print_prompt2_single();
+    while( pc.readable() == 0 );
+    amp_out = getchar();
+    if ( amp_out == 'y' ) {
+        shdn_n_lt3472 = 1;
+        printf("\nOn-board amplifier supply is enabled.\n");
+    } else {
+        shdn_n_lt3472 = 0;
+    }
+    
+    // * selecting Waveform Pattern * //
     while( connected == 1 ) {
-        print_prompt1_single();
-        while( pc.readable() == 0 );
-        ext_clk = getchar();
-        if ( ext_clk == 'y' ) {
-            en_cvddx = 0;
-            printf("\nPlease connect external clock source to J10.\n");
-        } else {
-            en_cvddx = 1;
-            printf("\nOn-board oscillator supply is enabled.\n");
-        }
-        
-        thread_sleep_for(500);
-        print_prompt2_single();
-        while( pc.readable() == 0 );
-        amp_out = getchar();
-        if ( amp_out == 'y' ) {
-            shdn_n_lt3472 = 1;
-            printf("\nOn-board amplifier supply is enabled.\n");
-        } else {
-            shdn_n_lt3472 = 0;
-        }
-        
         print_menu_single();
         while( pc.readable() == 0 );
         example = getchar();
@@ -140,14 +149,8 @@ int main() {
             print_prompt4();		
         }	
     }
-    
-    return 0;
 }
-#pragma endregion
-*/
-/*
-#pragma region: Main function for multi-board use case
-int main() {
+void main_multi(){
     char amp_out = 'n';	
     char stop = 'n';	
     char exit = 'n';	
@@ -161,31 +164,32 @@ int main() {
     
     setup_device_multi();	
     print_title_multi();	
-    
-    while( connected == 1 ) {
-        print_prompt1_multi();		
-        print_prompt2_multi();	
-        while( pc.readable() == 0 );	
-        amp_out = getchar();		
-        if ( amp_out == 'y' ) {	
-            shdn_n_lt3472 = 1;	
-            print_prompt2_ext();	
-        } else {	
-            shdn_n_lt3472 = 0;	
-        }
 
-        device2 = false;                            // Board 1 selection
-        print_menu_multi();	
-        while( pc.readable() == 0 );
-        example_b1 = getchar();
-        sel_example_multi( device2, example_b1 );
+    // * Configure Board Settings * //
+    print_prompt1_multi();		
+    print_prompt2_multi();	
+    while( pc.readable() == 0 );	
+    amp_out = getchar();		
+    if ( amp_out == 'y' ) {	
+        shdn_n_lt3472 = 1;	
+        print_prompt2_ext();	
+    } else {	
+        shdn_n_lt3472 = 0;	
+    }
+    device2 = false;                            // Board 1 selection
+    print_menu_multi();	
+    while( pc.readable() == 0 );
+    example_b1 = getchar();
+    sel_example_multi( device2, example_b1 );
         
-        device2 = true;                             // Board 2 selection
-        print_menu_ext();
-        while( pc.readable() == 0 );		
-        example_b2 = getchar();	
-        sel_example_multi( device2, example_b2 );
-        
+    device2 = true;                             // Board 2 selection
+    print_menu_ext();
+    while( pc.readable() == 0 );		
+    example_b2 = getchar();	
+    sel_example_multi( device2, example_b2 );
+
+    // * selecting Waveform Pattern * //
+    while( connected == 1 ) {
         print_prompt3();	
         while( pc.readable() == 0 );
         stop = getchar();		
@@ -198,13 +202,8 @@ int main() {
             print_prompt4();		
         }	
     }
-    
-    return 0;
 }
 #pragma endregion
-*/
-
-#pragma region (Function Definitions)
 #pragma region: Functions to set up SPI communication
 void setup_device_single() {
     device_single.spi_init( WORD_LEN, POL, FREQ );
