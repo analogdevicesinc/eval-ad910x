@@ -37,7 +37,7 @@
 /*** Defines for SPI protocol ***/
 #define WORD_LEN    16
 #define POL         0
-#define FREQ        1000000                    // Actual value: 703.125 kHz
+#define FREQ        1000000                    // Actual value: 781.25 kHz
 
 // *** Setting SPI Clock Frequency ***
 // SPI clock frequency can only be equal to select values.

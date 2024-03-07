@@ -176,20 +176,19 @@ void main_multi(){
     } else {	
         shdn_n_lt3472 = 0;	
     }
-    device2 = false;                            // Board 1 selection
-    print_menu_multi();	
-    while( pc.readable() == 0 );
-    example_b1 = getchar();
-    sel_example_multi( device2, example_b1 );
-        
-    device2 = true;                             // Board 2 selection
-    print_menu_ext();
-    while( pc.readable() == 0 );		
-    example_b2 = getchar();	
-    sel_example_multi( device2, example_b2 );
-
     // * selecting Waveform Pattern * //
     while( connected == 1 ) {
+        device2 = false;                            // Board 1 selection
+        print_menu_multi();	
+        while( pc.readable() == 0 );
+        example_b1 = getchar();
+        sel_example_multi( device2, example_b1 );
+        
+        device2 = true;                             // Board 2 selection
+        print_menu_ext();
+        while( pc.readable() == 0 );		
+        example_b2 = getchar();	
+        sel_example_multi( device2, example_b2 );
         print_prompt3();	
         while( pc.readable() == 0 );
         stop = getchar();		
